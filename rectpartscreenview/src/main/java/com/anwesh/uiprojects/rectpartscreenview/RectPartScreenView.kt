@@ -17,9 +17,40 @@ val colors : Array<String> = arrayOf("#01579B", "#f44336", "#00C853", "#FF5722",
 val parts : Int = 3
 val scGap : Float = 0.01f
 val backColor : Int = Color.parseColor("#BDBDBD")
-val delay : Long = 25
+val delay : Long = 30
 
 fun Int.inverse() : Float = 1f / this
 fun Float.maxScale(i : Int, n : Int) : Float = Math.max(0f, this - i * n.inverse())
 fun Float.divideScale(i : Int, n : Int) : Float = Math.min(n.inverse(), maxScale(i, n)) * n
 
+fun Canvas.drawRectPartScreen(i : Int, sc1 : Float, sc2 : Float, w : Float, h : Float, shouldFill : Boolean, paint : Paint) {
+    val sc1i : Float = sc1.divideScale(i, parts)
+    val sc2i : Float = sc2.divideScale(i, parts)
+    var wi : Float = 0f
+    if (sc2i > 0f) {
+        wi = w * sc2i
+    }
+    if (shouldFill) {
+        wi = w
+    }
+    save()
+    translate(0f, h * i)
+    drawRect(RectF(w * sc1i, 0f, wi, h), paint)
+    restore()
+}
+
+fun Canvas.drawRectParts(sc1 : Float, sc2 : Float, w : Float, h : Float, shouldFill : Boolean, paint : Paint) {
+    for (j in 0..(parts - 1)) {
+        drawRectPartScreen(j, sc1, sc2, w, h, shouldFill, paint)
+    }
+}
+
+fun Canvas.drawRPSNode(i : Int, scale : Float, sc : Float, currI : Int, paint : Paint) {
+    val w : Float = width.toFloat()
+    val h : Float = height.toFloat()
+    val hSize : Float = h / parts
+    paint.color = Color.parseColor(colors[i])
+    save()
+    drawRectParts(scale, sc, w, hSize, i == currI, paint)
+    restore()
+}
