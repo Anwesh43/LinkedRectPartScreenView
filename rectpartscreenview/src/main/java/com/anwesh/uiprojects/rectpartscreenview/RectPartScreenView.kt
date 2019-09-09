@@ -58,15 +58,16 @@ fun Canvas.drawRPSNode(i : Int, scale : Float, sc : Float, currI : Int, paint : 
 class RectPartScreenView(ctx : Context) : View(ctx) {
 
     private val paint : Paint = Paint(Paint.ANTI_ALIAS_FLAG)
+    private val renderer : Renderer = Renderer(this)
 
     override fun onDraw(canvas : Canvas) {
-
+        renderer.render(canvas, paint)
     }
 
     override fun onTouchEvent(event : MotionEvent) : Boolean {
         when (event.action) {
             MotionEvent.ACTION_DOWN -> {
-
+                renderer.handleTap()
             }
         }
         return true
@@ -139,7 +140,7 @@ class RectPartScreenView(ctx : Context) : View(ctx) {
         fun draw(canvas : Canvas, sc : Float, currI : Int, paint : Paint) {
             canvas?.drawRPSNode(i, state.scale, sc, currI, paint)
             if (state.scale > 0f) {
-                next.draw(canvas, state.scale, currI, paint)
+                next?.draw(canvas, state.scale, currI, paint)
             }
         }
 
@@ -215,7 +216,7 @@ class RectPartScreenView(ctx : Context) : View(ctx) {
         fun create(activity : Activity) : RectPartScreenView {
             val view : RectPartScreenView = RectPartScreenView(activity)
             activity.setContentView(view)
-            return view 
+            return view
         }
     }
 }
