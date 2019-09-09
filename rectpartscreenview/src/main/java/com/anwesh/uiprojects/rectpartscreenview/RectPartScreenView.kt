@@ -209,4 +209,13 @@ class RectPartScreenView(ctx : Context) : View(ctx) {
             }
         }
     }
+
+    companion object {
+
+        fun create(activity : Activity) : RectPartScreenView {
+            val view : RectPartScreenView = RectPartScreenView(activity)
+            activity.setContentView(view)
+            return view 
+        }
+    }
 }
