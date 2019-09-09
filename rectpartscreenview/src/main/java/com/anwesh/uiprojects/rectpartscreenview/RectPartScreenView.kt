@@ -14,10 +14,10 @@ import android.content.Context
 import android.app.Activity
 
 val colors : Array<String> = arrayOf("#01579B", "#f44336", "#00C853", "#FF5722", "#4A148C")
-val parts : Int = 3
-val scGap : Float = 0.01f
+val parts : Int = 5
+val scGap : Float = 0.01f / parts
 val backColor : Int = Color.parseColor("#BDBDBD")
-val delay : Long = 30
+val delay : Long = 5
 
 fun Int.inverse() : Float = 1f / this
 fun Float.maxScale(i : Int, n : Int) : Float = Math.max(0f, this - i * n.inverse())
