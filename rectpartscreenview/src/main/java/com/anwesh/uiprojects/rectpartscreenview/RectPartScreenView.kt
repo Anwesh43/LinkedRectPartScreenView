@@ -119,4 +119,48 @@ class RectPartScreenView(ctx : Context) : View(ctx) {
             }
         }
     }
+
+    data class RPSNode(var i : Int, val state : State = State()) {
+
+        private var next : RPSNode? = null
+        private var prev : RPSNode? = null
+
+        init {
+            addNeighbor()
+        }
+
+        fun addNeighbor() {
+            if (i < colors.size - 1) {
+                next = RPSNode(i + 1)
+                next?.prev = this
+            }
+        }
+
+        fun draw(canvas : Canvas, sc : Float, currI : Int, paint : Paint) {
+            canvas?.drawRPSNode(i, state.scale, sc, currI, paint)
+            if (state.scale > 0f) {
+                next.draw(canvas, state.scale, currI, paint)
+            }
+        }
+
+        fun update(cb : (Float) -> Unit) {
+            state.update(cb)
+        }
+
+        fun startUpdating(cb : () -> Unit) {
+            state.startUpdating(cb)
+        }
+
+        fun getNext(dir : Int, cb : () -> Unit) : RPSNode {
+            var curr : RPSNode? = prev
+            if (dir == 1) {
+                curr = next
+            }
+            if (curr != null) {
+                return curr
+            }
+            cb()
+            return this 
+        }
+    }
 }
