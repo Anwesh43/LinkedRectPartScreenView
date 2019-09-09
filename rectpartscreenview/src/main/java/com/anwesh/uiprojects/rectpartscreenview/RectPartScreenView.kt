@@ -187,4 +187,26 @@ class RectPartScreenView(ctx : Context) : View(ctx) {
             curr.startUpdating(cb)
         }
     }
+
+    data class Renderer(var view : RectPartScreenView) {
+
+        private val rps : RectPartScreen = RectPartScreen(0)
+        private val animator : Animator = Animator(view)
+
+        fun render(canvas : Canvas, paint : Paint) {
+            canvas.drawColor(backColor)
+            rps.draw(canvas, paint)
+            animator.animate {
+                rps.update {
+                    animator.stop()
+                }
+            }
+        }
+
+        fun handleTap() {
+            rps.startUpdating {
+                animator.start()
+            }
+        }
+    }
 }
